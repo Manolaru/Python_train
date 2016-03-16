@@ -10,6 +10,7 @@ def is_alert_present(wd):
     except:
         return False
 
+
 class test_add_group(unittest.TestCase):
     def setUp(self):
         self.wd = WebDriver()
@@ -20,7 +21,7 @@ class test_add_group(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd,username="admin",password="secret")
         self.open_groups_page(wd)
-        self.create_group(wd, Group(name="students1group",header="Logo",footer="comment"))
+        self.create_group(wd, Group(name="students_group",header="Logo",footer="comment"))
         self.return_to_groups_page(wd)
         self.logout(wd)
 
@@ -29,16 +30,14 @@ class test_add_group(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd,username="admin",password="secret")
         self.open_groups_page(wd)
-        self.create_group(wd, Group(name="", header="",footer=""))
+        self.create_group(wd, Group(name="empty", header="",footer=""))
         self.return_to_groups_page(wd)
         self.logout(wd)
 
     def logout(self, wd):
-        # logout
         wd.find_element_by_link_text("Logout").click()
 
     def return_to_groups_page(self, wd):
-        # return to group page
         wd.find_element_by_link_text("group page").click()
 
     def create_group(self, wd,group):
@@ -58,11 +57,9 @@ class test_add_group(unittest.TestCase):
         wd.find_element_by_name("submit").click()
 
     def open_groups_page(self, wd):
-        # open groups page
         wd.find_element_by_link_text("groups").click()
 
     def login(self, wd, username, password):
-        # login
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -72,7 +69,6 @@ class test_add_group(unittest.TestCase):
         wd.find_element_by_css_selector("input[type=\"submit\"]").click()
 
     def open_home_page(self, wd):
-        # open home page
         wd.get("http://localhost/addressbook/")
 
     def tearDown(self):
