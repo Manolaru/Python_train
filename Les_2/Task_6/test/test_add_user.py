@@ -11,9 +11,10 @@ def app(request):
     return fixture
 
 
+
 def test_add_user(app):
-    app.login(username="admin",password="secret")
-    app.create_user(User(fname="Jana", lname= "Geddis", title= "Manager", company= "KPMG", address= "Moscow, Smolenskaya emb.",phoneh= "9876612",
+    app.session.login(username="admin",password="secret")
+    app.user.create_user(User(fname="Jana", lname= "Geddis", title= "Manager", company= "KPMG", address= "Moscow, Smolenskaya emb.",phoneh= "9876612",
                          email="jana.geddis@kpmg.com", byear= "1988"))
-    app.logout()
+    app.session.logout()
 
