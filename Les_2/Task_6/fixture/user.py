@@ -45,3 +45,14 @@ class UserHelper:
          wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[3]").click()
      #  submit user creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+
+    def delete_first_user(self):
+        wd = self.app.wd
+        self.app.open_home_page()
+       # select first group
+        wd.find_element_by_name("selected[]").click()
+        # submit deletion
+        wd.find_element_by_xpath ("//div[@id='content']/form[2]/div[2]/input").click()
+        wd.switch_to_alert().accept()
+
+
