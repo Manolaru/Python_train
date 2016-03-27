@@ -1,55 +1,52 @@
+from model.user import User
+
 class UserHelper:
     def __init__(self,app):
         self.app = app
 
 
-
-    def create_user(self, user):
+    def create(self, user):
         wd = self.app.wd
         self.app.open_home_page()
       # open user form
         wd.find_element_by_link_text("add new").click()
        # fill user form
-        wd.find_element_by_name("firstname").click()
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys(user.fname)
-        wd.find_element_by_name("lastname").click()
-        wd.find_element_by_name("lastname").clear()
-        wd.find_element_by_name("lastname").send_keys(user.lname)
-        wd.find_element_by_name("title").click()
-        wd.find_element_by_name("title").clear()
-        wd.find_element_by_name("title").send_keys(user.title)
-        wd.find_element_by_name("company").click()
-        wd.find_element_by_name("company").clear()
-        wd.find_element_by_name("company").send_keys()
-        wd.find_element_by_name("company").click()
-        wd.find_element_by_name("company").clear()
-        wd.find_element_by_name("company").send_keys(user.company)
-        wd.find_element_by_name("address").click()
-        wd.find_element_by_name("address").clear()
-        wd.find_element_by_name("address").send_keys(user.address)
-        wd.find_element_by_name("home").click()
-        wd.find_element_by_name("home").clear()
-        wd.find_element_by_name("home").send_keys(user.phoneh)
-        wd.find_element_by_name("email").click()
-        wd.find_element_by_name("email").clear()
-        wd.find_element_by_name("email").send_keys(user.email)
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").is_selected():
-         wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").click()
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[7]").is_selected():
-         wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[7]").click()
-        wd.find_element_by_name("byear").click()
-        wd.find_element_by_name("byear").clear()
-        wd.find_element_by_name("byear").send_keys(user.byear)
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[3]").is_selected():
-         wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[3]").click()
-     #  submit user creation
+        self.fill_user_form(user)
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+
+
+    def change_field_value(self, field_name, text):
+        wd = self.app.wd
+        if text is not None:
+          wd.find_element_by_name(field_name).click()
+          wd.find_element_by_name(field_name).clear()
+          wd.find_element_by_name(field_name).send_keys(text)
+
+    def fill_user_form(self, user):
+        wd = self.app.wd
+        self.change_field_value("firstname", user.fname)
+        self.change_field_value("lastname", user.lname)
+        self.change_field_value("title", user.title)
+        self.change_field_value("company", user.company)
+        self.change_field_value("address", user.address)
+        self.change_field_value("home", user.phoneh)
+        self.change_field_value("email", user.email)
+        self.change_field_value("byear",user.byear)
+
+
+        # if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").is_selected():
+        #     wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").click()
+        # if not wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[7]").is_selected():
+        #     wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[7]").click()
+        # if not wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[3]").is_selected():
+        #     wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[3]").click()
+        #     #  submit user creation
+        # self.return_to_groups_page()
 
     def edit_first_user(self):
         wd = self.app.wd
         self.app.open_home_page()
-       # select first user
+        # select first user
         wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
         wd.find_element_by_name("lastname").click()
         wd.find_element_by_name("lastname").clear()
@@ -59,10 +56,31 @@ class UserHelper:
     def delete_first_user(self):
         wd = self.app.wd
         self.app.open_home_page()
-       # select first group
-        wd.find_element_by_name("selected[]").click()
+        self.select_first_user()
         # submit deletion
         wd.find_element_by_xpath ("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
 
+    def select_first_user(self):
+        wd = self.app.wd
+        # select first group
+        wd.find_element_by_name("selected[]").click()
 
+    def modify_first_user(self, new_user_data):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_first_user()
+        #open modification form
+        wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
+        #fill modification form
+        self.fill_user_form(new_user_data)
+        #submit modification
+        wd.find_element_by_name("update").click()
+
+
+
+
+    def count(self):
+        wd = self.app.wd
+        self.app.open_home_page()
+        return len(wd.find_elements_by_name("selected[]"))

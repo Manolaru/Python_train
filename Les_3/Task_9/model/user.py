@@ -1,5 +1,8 @@
+
+
+
 class User:
-    def __init__(self, fname, lname, title, company, address, phoneh, email, byear):
+    def __init__(self, fname=None, lname=None, title=None, company=None, address=None, phoneh=None, email=None, byear=None):
         self.fname = fname
         self.lname = lname
         self.title = title
