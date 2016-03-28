@@ -1,16 +1,21 @@
-from model.user import User
 
 class UserHelper:
     def __init__(self,app):
         self.app = app
 
+    def open_home_page(self):
+        wd = self.app.wd
+        #check current page
+        #txt = wd.current_url
+        if not (wd.current_url.endswith ("/addressbook/")):
+                self.app.open_home_page()
 
     def create(self, user):
         wd = self.app.wd
-        self.app.open_home_page()
-      # open user form
+        self.open_home_page()
+        # open user form
         wd.find_element_by_link_text("add new").click()
-       # fill user form
+        # fill user form
         self.fill_user_form(user)
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
 
@@ -34,18 +39,9 @@ class UserHelper:
         self.change_field_value("byear",user.byear)
 
 
-        # if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").is_selected():
-        #     wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").click()
-        # if not wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[7]").is_selected():
-        #     wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[7]").click()
-        # if not wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[3]").is_selected():
-        #     wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[3]").click()
-        #     #  submit user creation
-        # self.return_to_groups_page()
-
     def edit_first_user(self):
         wd = self.app.wd
-        self.app.open_home_page()
+        self.open_home_page()
         # select first user
         wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
         wd.find_element_by_name("lastname").click()
@@ -55,7 +51,7 @@ class UserHelper:
 
     def delete_first_user(self):
         wd = self.app.wd
-        self.app.open_home_page()
+        self.open_home_page()
         self.select_first_user()
         # submit deletion
         wd.find_element_by_xpath ("//div[@id='content']/form[2]/div[2]/input").click()
@@ -68,7 +64,7 @@ class UserHelper:
 
     def modify_first_user(self, new_user_data):
         wd = self.app.wd
-        self.app.open_home_page()
+        self.open_home_page()
         self.select_first_user()
         #open modification form
         wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
@@ -76,8 +72,6 @@ class UserHelper:
         self.fill_user_form(new_user_data)
         #submit modification
         wd.find_element_by_name("update").click()
-
-
 
 
     def count(self):
