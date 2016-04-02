@@ -19,6 +19,7 @@ class UserHelper:
         # fill user form
         self.fill_user_form(user)
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        self.group_cache = None
 
 
     def change_field_value(self, field_name, text):
@@ -49,6 +50,7 @@ class UserHelper:
         wd.find_element_by_name("lastname").clear()
         wd.find_element_by_name("lastname").send_keys("Gedda")
         wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def delete_first_user(self):
         wd = self.app.wd
@@ -73,6 +75,7 @@ class UserHelper:
         self.fill_user_form(new_user_data)
         #submit modification
         wd.find_element_by_name("update").click()
+        self.group_cache = None
 
 
     def count(self):
@@ -80,12 +83,18 @@ class UserHelper:
         self.app.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    user_cache = None
+
+
     def get_user_list(self):
-        wd = self.app.wd
-        self.open_home_page()
-        user=[]
-        for element in wd.find_element_by_css_selector ("td.center"):
-            text=element.text
-            id= element.find_element_by_name("selected[]").get_attribute("value")
-            user.append(User(lname=text, id=id))
-        return user
+        if self.user_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.user_cache =[]
+            for element in wd.find_element_by_css_selector ("td.center"):
+                text=element.text
+                id= element.find_element_by_name("selected[]").get_attribute("value")
+                self.user_cache.append(User(lname=text, id=id))
+        return list(self.user_cache)
+
+
