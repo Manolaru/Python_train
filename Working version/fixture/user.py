@@ -22,6 +22,7 @@ class UserHelper:
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.user_cache = None
 
+
     def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
@@ -52,24 +53,39 @@ class UserHelper:
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
+
     def delete_first_user(self):
+        self.delete_user_by_index(0)
+
+    def delete_user_by_index(self,index):
         wd = self.app.wd
         self.open_home_page()
-        self.select_first_user()
+        self.select_user_by_index(index)
         # submit deletion
         wd.find_element_by_xpath ("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+        self.open_home_page()
         self.user_cache = None
 
     def select_first_user(self):
         wd = self.app.wd
-        # select first group
+        # select first user
         wd.find_element_by_name("selected[]").click()
+        # wd.find_elements_by_name("selected[]")[0].click()
+
+    def select_user_by_index(self,index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+
 
     def modify_first_user(self, new_user_data):
+        self.modify_user_by_index(0,new_user_data)
+
+
+    def modify_user_by_index(self,index, new_user_data):
         wd = self.app.wd
         self.open_home_page()
-        self.select_first_user()
+        self.select_user_by_index(index)
         #open modification form
         wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
         #fill modification form
@@ -78,28 +94,29 @@ class UserHelper:
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
+
     def count(self):
         wd = self.app.wd
         self.app.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
-
     user_cache = None
+
 
     def get_user_list(self):
         if self.user_cache is None:
             wd = self.app.wd
             self.open_home_page()
             self.user_cache =[]
-            users=[]
-        itemrow = False
-        for element in wd.find_elements_by_css_selector ("tr"):
-            if itemrow:
-                items = element.find_elements_by_css_selector ("td")
-                id = items[0].find_element_by_name("selected[]").get_attribute("value")
-                l_name = items[1].text
-                f_name = items[2].text
-                self.user_cache.append(User(id = id, lname=l_name, fname=f_name))
-            itemrow = True
+            itemrow = False
+            for element in wd.find_elements_by_css_selector ("tr"):
+                if itemrow:
+                    items = element.find_elements_by_css_selector ("td")
+                    id = items[0].find_element_by_name("selected[]").get_attribute("value")
+                    l_name = items[1].text
+                    f_name = items[2].text
+                    self.user_cache.append(User(id = id, lname=l_name, fname=f_name))
+                itemrow = True
         return list(self.user_cache)
+
 

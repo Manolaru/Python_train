@@ -7,7 +7,6 @@ def test_add_user(app):
     user=User(fname="Jana", lname="Geddis", title="Manager", company="KPMG", address="Moscow, Smolenskaya emb.", phoneh="9876612",
                          email="jana.geddis@kpmg.com", byear= "1988")
     app.user.create(user)
-    new_users=app.user.get_user_list()
     assert len(old_users) + 1 == app.user.count()
     new_users=app.user.get_user_list()
     old_users.append(user)

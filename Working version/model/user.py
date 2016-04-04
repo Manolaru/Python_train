@@ -21,9 +21,10 @@ class User:
         return (self.id is None or other.id is None or self.id == other.id) \
                and self.lname == other.lname and self.fname == other.fname
 
-
     def id_or_max(self):
         if self.id:
             return int(self.id)
         else:
             return maxsize
+
+
