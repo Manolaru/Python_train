@@ -8,7 +8,8 @@ class UserHelper:
         wd = self.app.wd
         #check current page
         #txt = wd.current_url
-        if not (wd.current_url.endswith ("/addressbook/")):
+        if not (wd.current_url.endswith ("/addressbook/")
+                and len(wd.find_elements_by_css_selector("input[type=\"button\"]")) > 0):
                 self.app.open_home_page()
 
     def create(self, user):
@@ -83,9 +84,15 @@ class UserHelper:
     def get_user_list(self):
         wd = self.app.wd
         self.open_home_page()
-        user=[]
-        for element in wd.find_element_by_css_selector ("td.center"):
-            text=element.text
-            id= element.find_element_by_name("selected[]").get_attribute("value")
-            user.append(User(lname=text, id=id))
-        return user
+        users=[]
+        itemrow = False
+        for element in wd.find_elements_by_css_selector ("tr"):
+            if itemrow:
+                items = element.find_elements_by_css_selector ("td")
+                id = items[0].find_element_by_name("selected[]").get_attribute("value")
+                l_name = items[1].text
+                f_name = items[2].text
+                users.append(User(id = id, lname=l_name, fname=f_name))
+            itemrow = True
+        return users
+
