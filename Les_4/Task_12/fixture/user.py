@@ -8,7 +8,8 @@ class UserHelper:
         wd = self.app.wd
         #check current page
         #txt = wd.current_url
-        if not (wd.current_url.endswith ("/addressbook/")):
+        if not (wd.current_url.endswith ("/addressbook/")
+                and len(wd.find_elements_by_css_selector("input[type=\"button\"]")) > 0):
                 self.app.open_home_page()
 
     def create(self, user):
@@ -19,8 +20,7 @@ class UserHelper:
         # fill user form
         self.fill_user_form(user)
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        self.group_cache = None
-
+        self.user_cache = None
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -59,6 +59,7 @@ class UserHelper:
         # submit deletion
         wd.find_element_by_xpath ("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+        self.user_cache = None
 
     def select_first_user(self):
         wd = self.app.wd
@@ -75,26 +76,30 @@ class UserHelper:
         self.fill_user_form(new_user_data)
         #submit modification
         wd.find_element_by_name("update").click()
-        self.group_cache = None
-
+        self.user_cache = None
 
     def count(self):
         wd = self.app.wd
         self.app.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
-    user_cache = None
 
+    user_cache = None
 
     def get_user_list(self):
         if self.user_cache is None:
             wd = self.app.wd
             self.open_home_page()
             self.user_cache =[]
-            for element in wd.find_element_by_css_selector ("td.center"):
-                text=element.text
-                id= element.find_element_by_name("selected[]").get_attribute("value")
-                self.user_cache.append(User(lname=text, id=id))
+            users=[]
+        itemrow = False
+        for element in wd.find_elements_by_css_selector ("tr"):
+            if itemrow:
+                items = element.find_elements_by_css_selector ("td")
+                id = items[0].find_element_by_name("selected[]").get_attribute("value")
+                l_name = items[1].text
+                f_name = items[2].text
+                self.user_cache.append(User(id = id, lname=l_name, fname=f_name))
+            itemrow = True
         return list(self.user_cache)
-
 

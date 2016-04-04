@@ -10,3 +10,7 @@ def test_delete_first_user(app):
     old_users[0:1]= []
     assert old_users == new_users
 
+
+
+
+

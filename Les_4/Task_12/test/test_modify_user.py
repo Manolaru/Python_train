@@ -6,7 +6,7 @@ def test_modify_user_lname(app):
         app.user.create(User(lname="Testman"))
     app.user.modify_first_user(User(lname="New lastname"))
     old_users=app.user.get_user_list()
-    user=User (lname= "New Lastname")
+    user=User (lname= "New Lastname", fname="" )
     user.id = old_users[0].id
     app.user.modify_first_user(user)
     new_users=app.user.get_user_list()
