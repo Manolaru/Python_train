@@ -4,7 +4,7 @@ from random import randrange
 def test_modify_user_lname(app):
     if app.user.count() == 0:
         app.user.create(User(lname="Testman"))
-    app.user.modify_first_user(User(lname="New lastname"))
+    #app.user.modify_first_user(User(lname="New lastname"))
     old_users=app.user.get_user_list()
     index=randrange(len(old_users))
     user=User(lname= "New Lastname", fname="")
@@ -14,7 +14,6 @@ def test_modify_user_lname(app):
     assert len(old_users)  == len (new_users)
     old_users [index]=user
     assert sorted(old_users,key=User.id_or_max) == sorted(new_users,key=User.id_or_max)
-
 
 
 

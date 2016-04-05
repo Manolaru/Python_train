@@ -82,12 +82,13 @@ class UserHelper:
         self.modify_user_by_index(0,new_user_data)
 
 
-    def modify_user_by_index(self,index, new_user_data):
+    def modify_user_by_index(self, index, new_user_data):
         wd = self.app.wd
         self.open_home_page()
-        self.select_user_by_index(index)
+        # self.select_user_by_index(index)
         #open modification form
-        wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
+        edit_buttons = wd.find_elements_by_css_selector("img[alt=\"Edit\"]")
+        edit_buttons[index].click()
         #fill modification form
         self.fill_user_form(new_user_data)
         #submit modification

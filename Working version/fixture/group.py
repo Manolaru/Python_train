@@ -49,6 +49,7 @@ class GroupHelper:
         # submit editing
         wd.find_element_by_name("update").click()
         self.return_to_groups_page()
+        self.group_cache = None
 
    def  delete_first_group(self):
         self.delete_group_by_index(0)
