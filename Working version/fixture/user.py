@@ -36,6 +36,7 @@ class UserHelper:
         self.change_field_value("firstname", user.fname)
         self.change_field_value("lastname", user.lname)
         self.change_field_value("home", user.home)
+        self.change_field_value("address", user.address)
         self.change_field_value("mobile", user.mobile)
         self.change_field_value("work", user.work)
         self.change_field_value("email", user.email)
@@ -127,11 +128,12 @@ class UserHelper:
                     id = items[0].find_element_by_name("selected[]").get_attribute("value")
                     l_name = items[1].text
                     f_name = items[2].text
-                    all_phones = items[5].text.splitlines()
-                    all_emails = items[4].text.splitlines()
-                    self.user_cache.append(User(id = id, lname=l_name, fname=f_name, home=all_phones[0],
-                                                mobile=all_phones[1], work=all_phones[2],
-                                                email=all_emails[0], email2=all_emails[1], email3=all_emails[2]))
+                    address = items[3].text
+                    all_phones = items[5].text
+                    all_emails = items[4].text
+                    self.user_cache.append(User(id = id, lname=l_name, fname=f_name, address=address,
+                                                all_phones_from_home_page = all_phones,
+                                                all_emails_from_home_page=all_emails))
                 itemrow = True
         return list(self.user_cache)
 
@@ -161,14 +163,16 @@ class UserHelper:
         fname=wd.find_element_by_name("firstname").get_attribute("value")
         lname=wd.find_element_by_name("lastname").get_attribute("value")
         id=wd.find_element_by_name("id").get_attribute("value")
+        address=wd.find_element_by_name("address").get_attribute("value")
         home=wd.find_element_by_name("home").get_attribute("value")
         mobile=wd.find_element_by_name("mobile").get_attribute("value")
         work=wd.find_element_by_name("work").get_attribute("value")
-        email=wd.find_element_by_name("email").get_attribute("email")
-        email2=wd.find_element_by_name("email2").get_attribute("email2")
-        email3=wd.find_element_by_name("email3").get_attribute("email3")
+        email=wd.find_element_by_name("email").get_attribute("value")
+        email2=wd.find_element_by_name("email2").get_attribute("value")
+        email3=wd.find_element_by_name("email3").get_attribute("value")
 
-        return User(fname=fname,lname=lname,id=id,home=home, mobile=mobile, work=work,
+        return User(fname=fname,lname=lname,id=id,
+                    address=address,home=home, mobile=mobile, work=work,
                     email=email, email2=email2, email3=email3)
 
     def get_contact_from_view_page (self, index):
